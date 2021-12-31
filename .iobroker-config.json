@@ -1,0 +1,6 @@
+{
+  "ioBrokerUrl": "http://192.168.40.17",
+  "socketIoPort": 8081,
+  "scriptRoot": "/opt/iobroker/node_modules/iobroker.opnsense",
+  "adminVersion": "admin5"
+}
