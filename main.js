@@ -8,6 +8,11 @@
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
 
+const opnsense_key = 'N5bOXdiJxZvXcgAc2D56mf6HH3x1yDndO5zkvj15m9JOxNMGNI0Ai91ZBZ5r0t952v+eLnxSoqCmYvMi';
+const opnsense_secret = 'mmBPSUJnlV/IrQLR8YHKu3/dXVO6FfnjGF5wBrR1/WU2iZptMbiWsXVWwWMBMamjl4XQ+QryT/YBVBMV';
+const interval = '10';
+const axios = require('axios')
+
 // Load your modules here, e.g.:
 // const fs = require("fs");
 

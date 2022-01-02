@@ -1,2 +1,6 @@
 # ioBroker dev-server
 .dev-server/
+.git
+.idea
+node_modules
+nbproject
