@@ -2,5 +2,6 @@
 .dev-server/
 .git
 .idea
+.iobroker-config.json
 node_modules
 nbproject
