@@ -18,7 +18,8 @@
 			"de": "Erklärung zur OPNsense"
 		},
 		"authors": [
-			"Seqway <zeckel@gmx.de>"
+			"Seqway <zeckel@gmx.de>",
+			"gemuesepudding <volker@richert.nrw>"
 		],
 		"keywords": [
 			"opnsense",
@@ -29,7 +30,7 @@
 		"main": "main.js",
 		"icon": "opnsense.jpg",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Seqway/ioBroker.opnsense/main/admin/opnsense.jpg",
+		"extIcon": "https://raw.githubusercontent.com/Seqway/ioBroker.opnsense/dev/admin/opnsense.png",
 		"readme": "https://github.com/Seqway/ioBroker.opnsense/blob/main/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
