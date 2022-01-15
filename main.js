@@ -64,7 +64,7 @@ class Opnsense extends utils.Adapter {
       })
     })
 
-    let client = new OPNSenseClient(opnsense.key, opnsense.secret, 'https://192.168.6.69/api')
+    let client = new OPNSenseClient(opnsense.key, opnsense.secret, 'https://192.168.40.174/api')
 
     config.modules && config.modules.forEach(module => {
       module && module.controllers.forEach(controller => {
@@ -250,6 +250,7 @@ class Opnsense extends utils.Adapter {
   // 		this.log.info(`object ${id} deleted`);
   // 	}
   // }
+  // test
 
   /**
    * Is called if a subscribed state changes
