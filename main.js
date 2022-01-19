@@ -18,6 +18,8 @@ const interval = '10';
 // const fs = require("fs");
 
 class Opnsense extends utils.Adapter {
+  timer = [];
+  client;
 
   /**
    * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -38,6 +40,7 @@ class Opnsense extends utils.Adapter {
    */
   async onReady () {
     // Initialize folders
+    this.client = new OPNSenseClient(opnsense.key, opnsense.secret, 'https://192.168.6.69/api')
 
     config.modules && config.modules.forEach(module => {
       this.setObjectNotExistsAsync(module.name, {
@@ -58,45 +61,55 @@ class Opnsense extends utils.Adapter {
                   name: command.name, read: true, write: true
                 }, native: {}
               })
+
+              command.module = module.name;
+              command.controller = controller.name;
+              command.refresh = command.refresh || 15 * 60; // default refresh rate
+              if (isEmpty(command.url)) {
+                command.url = `${module.name}/${controller.name}/${command.name}`.toLowerCase()
+              }
+              command.method = command.method.toLowerCase() || 'get';
+
+              this.log.info('starting scheduler for ' + command.name + ' every ' + command.refresh + ' seconds.')
+              this.handleCommand(command, this.client)
+              this.timer.push(setInterval(this.handleCommand.bind(this), command.refresh * 1000, command, this.client))
             })
           })
         })
       })
     })
-
-    let client = new OPNSenseClient(opnsense.key, opnsense.secret, 'https://192.168.6.69/api')
-
-    config.modules && config.modules.forEach(module => {
-      module && module.controllers.forEach(controller => {
-        controller && controller.commands.forEach(command => {
-          this.log.info('call ' + command.name);
-          let url = command.url;
-          if (isEmpty(url)) {
-            url = `${module.name}/${controller.name}/${command.name}`.toLowerCase()
-          }
-          let method = command.method.toLowerCase() || 'get';
-
-          switch (method) {
-            case 'get':
-              client.get(url)
-                .then(async result => {
-                  //this.log.debug(JSON.stringify(result))
-                  let transformed = result;
-                  if (typeof command.transform === 'function') {
-                    transformed = command.transform(transformed);
-                  }
-
-                  transformed = this.removeIgnored(command.ignore, transformed)
-                  this.setStates([ module.name, controller.name, command.name].join('.'), transformed);
-                }).catch(reason => {
-                this.log.error(reason)
-              });
-
-              break;
-          }
-        })
-      })
-    })
+    //
+    // config.modules && config.modules.forEach(module => {
+    //   module && module.controllers.forEach(controller => {
+    //     controller && controller.commands.forEach(command => {
+    //       this.log.info('call ' + command.name);
+    //       let url = command.url;
+    //       if (isEmpty(url)) {
+    //         url = `${module.name}/${controller.name}/${command.name}`.toLowerCase()
+    //       }
+    //       let method = command.method.toLowerCase() || 'get';
+    //
+    //       switch (method) {
+    //         case 'get':
+    //           client.get(url)
+    //             .then(async result => {
+    //               //this.log.debug(JSON.stringify(result))
+    //               let transformed = result;
+    //               if (typeof command.transform === 'function') {
+    //                 transformed = command.transform(transformed);
+    //               }
+    //
+    //               transformed = this.removeIgnored(command.ignore, transformed)
+    //               this.setStates([ module.name, controller.name, command.name].join('.'), transformed);
+    //             }).catch(reason => {
+    //               this.log.error(reason)
+    //           });
+    //
+    //           break;
+    //       }
+    //     })
+    //   })
+    // })
 
     // Reset the connection indicator during startup
     this.setState('info.connection', false, true);
@@ -152,6 +165,30 @@ class Opnsense extends utils.Adapter {
     // this.log.info("check group user admin group admin: " + result);
   }
 
+  handleCommand (command, client) {
+    this.log.info('execute ' + command.name);
+    const method = command.method
+
+    switch (method) {
+      case 'get':
+        client.get(command.url)
+          .then(async result => {
+            //this.log.debug(JSON.stringify(result))
+            let transformed = result;
+            if (typeof command.transform === 'function') {
+              transformed = command.transform(transformed);
+            }
+
+            transformed = this.removeIgnored(command.ignore, transformed)
+            this.setStates([ command.module, command.controller, command.name ].join('.'), transformed);
+          }).catch(reason => {
+            this.log.error(reason)
+        });
+
+        break;
+    }
+  }
+
   setStates (parentName, transformed) {
     for (const [ key, value ] of Object.entries(transformed)) {
       console.log(`${key}(${key.toCamelCase()}): ${value}`);
@@ -197,8 +234,7 @@ class Opnsense extends utils.Adapter {
         return 'number';
 
       case 'object':
-        if (isArray(value)) return 'array';
-        else if (isObject(value)) return 'object';
+        if (isArray(value)) return 'array'; else if (isObject(value)) return 'object';
       case 'undefined':
       case 'function':
       case 'symbol':
