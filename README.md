@@ -1,4 +1,4 @@
-![Logo](admin/opnsense.png)
+![Logo](admin/opnsense.jpg)
 
 # ioBroker.opnsense
 
@@ -13,7 +13,7 @@
 
 ## opnsense adapter for ioBroker
 
-Test
+Adapter for API of OPNSense
 
 ## Developer manual
 
@@ -24,12 +24,12 @@ This section is intended for the developer. It can be deleted later.
 Please make sure that you consider copyrights and trademarks when you use names or logos of a company and add a disclaimer to your README.
 You can check other adapters for examples or ask in the developer community. Using a name or logo of a company without permission may cause legal problems for you.
 
-### Best Practices
+<!-- ### Best Practices
 
 We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
-check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
+check them out. If you're already experienced, you should also take a look at them - you might learn something new :) -->
 
-### Scripts in `package.json`
+<!-- ### Scripts in `package.json`
 
 Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
 | Script name | Description |
@@ -41,9 +41,9 @@ Several npm scripts are predefined for your convenience. You can run them using 
 | `check` | Performs a type-check on your code (without compiling anything). |
 | `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
 | `translate` | Translates texts in your adapter to all required languages, see [`@iobroker/adapter-dev`](https://github.com/ioBroker/adapter-dev#manage-translations) for more details. |
-| `release` | Creates a new release, see [`@alcalzone/release-script`](https://github.com/AlCalzone/release-script#usage) for more details. |
+| `release` | Creates a new release, see [`@alcalzone/release-script`](https://github.com/AlCalzone/release-script#usage) for more details. | -->
 
-### Writing tests
+<!-- ### Writing tests
 
 When done right, testing code is invaluable, because it gives you the
 confidence to change your code while knowing exactly if and when
@@ -71,7 +71,7 @@ Additional command line options for the release script are explained in the
 [release-script documentation](https://github.com/AlCalzone/release-script#command-line).
 
 To get your adapter released in ioBroker, please refer to the documentation
-of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
+of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository). -->
 
 ## Changelog
 

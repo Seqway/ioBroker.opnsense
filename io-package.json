@@ -49,7 +49,7 @@
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "main.js",
-        "icon": "opnsense.png",
+        "icon": "opnsense.jpg",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/Seqway/ioBroker.opnsense/master/admin/opnsense.png",
         "readme": "https://github.com/Seqway/ioBroker.opnsense/blob/master/README.md",
@@ -76,8 +76,14 @@
     },
     "native": {
         "startDate": "20220401",
-        "endDate": "20220404"
+        "endDate": "20220404",
+        "OPNsenseServerIp": "https://192.168.40.160/api/core/firmware/status",
+        "apikey": "2fq+XafyG5VhMtqlFhaaa/ELd07FbrUKcM1Yiry2DYrx0e+qQjYiFgX+qz/AovmWnCxmVYkPzLswPB2u",
+        "apisecret": "973x1HOvmGYtKu6xkiGQPrjERfxcPKPtY1EXjZet/kilhU1CdvtYWGOtTZBmQkoRNdufGsXTqDj7qPo5",
+        "pollcycle": ""
     },
+    "encryptedNative": ["apikey", "apisecret"],
+    "protectedNative": ["apikey", "apisecret"],
     "objects": [],
     "instanceObjects": [
         {

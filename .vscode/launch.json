@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch normal",
+            "program": "${workspaceFolder}/main.js",
+            "args": ["--instance", "0", "--force", "--logs", "--debug"],
+            "request": "launch",
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node"
+        },
+        {
+            "name": "Launch mit Stop",
+            "program": "${workspaceFolder}/main.js",
+            "args": ["--instance", "0", "--force", "--logs", "--debug"],
+            "request": "launch",
+            "stopOnEntry": true,
+            "console": "internalConsole",
+            "outputCapture": "std",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node"
+        },
+        {
+            "name": "Attach by Process ID",
+            "processId": "${command:PickProcess}",
+            "request": "attach",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node"
+        }
+    ]
+}
