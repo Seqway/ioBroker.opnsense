@@ -1,16 +1,28 @@
 {
-    "i18n": true,
     "type": "panel",
+    "i18n": true,
     "items": {
-        "option1": {
-            "type": "checkbox",
-            "label": "option1",
-            "newLine": true
-        },
-        "option2": {
+        "startDate": {
+            "newLine": true,
             "type": "text",
-            "label": "option2",
-            "newLine": true
+            "label": "Start Date:",
+            "maxLength": 8,
+            "validator": "/[0-9]{8}/.test(data.startDate)"
+        },
+        "endDate": {
+            "type": "text",
+            "label": "End Date:",
+            "maxLength": 8,
+            "validator": "/[0-9]{8}/.test(data.endDate)"
+        },
+        "_errorMessage": {
+            "newLine": true,
+            "type": "staticText",
+            "text": "Please enter Date in format YYYYMMDD.",
+            "hidden": "/[0-9]{8}/.test(data.startDate) && /[0-9]{8}/.test(data.endDate)",
+            "style": {
+                "color": "red"
+            }
         }
     }
 }

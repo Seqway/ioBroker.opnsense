@@ -10,6 +10,7 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
+const axios = require("axios").default;
 
 class Opnsense extends utils.Adapter {
     /**
@@ -30,33 +31,76 @@ class Opnsense extends utils.Adapter {
     /**
      * Is called when databases are connected and adapter received configuration.
      */
-    async onReady() {
+    //async onReady() {
         // Initialize your adapter here
 
         // Reset the connection indicator during startup
-        this.setState("info.connection", false, true);
+     //   this.setState("info.connection", false, true);
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        this.log.info("config option1: " + this.config.option1);
-        this.log.info("config option2: " + this.config.option2);
+    //    this.log.info("config option1: " + this.config.option1);
+    //    this.log.info("config option2: " + this.config.option2);
 
         /*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
 		*/
-        await this.setObjectNotExistsAsync("testVariable", {
-            type: "state",
-            common: {
-                name: "testVariable",
-                type: "boolean",
-                role: "indicator",
-                read: true,
-                write: true,
-            },
-            native: {},
-        });
+     //   await this.setObjectNotExistsAsync("testVariable", {
+     //       type: "state",
+     //       common: {
+     //           name: "testVariable",
+     //           type: "boolean",
+     //           role: "indicator",
+     //           read: true,
+     //           write: true,
+     //       },
+     //       native: {},
+     //   });
+     async onReady() {
+        axios.defaults.timeout = 5000; //set timeout to 5 seconds
+        //download data:
+        const url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/de.wikipedia/all-access/all-agents/IoBroker/daily/20220401/20220404';
+        try {
+            const response = await axios.get(url);
+            if (response.status === 200) {
+                const data = response.data;
+    
+                //for each day:
+                for (const day of data.items) {
+                    //create object, using timestamp as ID. ID should always be unique and constant for a certain device.
+                    await this.setObjectNotExistsAsync(day.timestamp, {
+                        type: 'state',
+                        common: {
+                            type: 'number',
+                            role: 'url', //select a role from https://www.iobroker.net/#en/documentation/dev/stateroles.md - try to be as specific as possible.
+                            read: true,
+                            write: false,
+                            name: `Day ${day.timestamp}`
+                        },
+                        native: {}
+                    });
+    
+                    //now set the value of the state. Set 'ack' to true in order to show ioBroker that this data comes from the 'device'.
+                    await this.setStateAsync(day.timestamp, day.views, true);
+                    //remove used objects from the hashmap.
+                    //NOTE: usually we can omit 'test.x.' on our own objects, but getAdapterObjects fills the hashmap for full ids.
+                delete adapterObjects[this.namespace + '.' + day.timestamp];
+            }
+            //delete all Objects that were not used above:
+            for (const id of Object.keys(adapterObjects)) {
+                await this.delObjectAsync(id);
+            }
+                
+            } else {
+                this.log.error('Could not retrieve data, status code ' + response.status);
+            }
+        } catch (e) {
+            this.log.error('Could not retrieve data: ' + e.message);
+        }
+    }
+    
 
         // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
         this.subscribeStates("testVariable");

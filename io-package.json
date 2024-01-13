@@ -75,8 +75,8 @@
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "startDate": "20220401",
+        "endDate": "20220404"
     },
     "objects": [],
     "instanceObjects": [
